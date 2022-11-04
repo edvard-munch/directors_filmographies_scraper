@@ -41,19 +41,21 @@ def run_script():
 
 	if top_billing:
 		for item in top_billing:
-			catalogization = item.find(id=re.compile(CATALOGIZATION_ID))
+			involvement = item.find(class_='film_subline').contents[2]
+			if 'Director' in involvement:
+				catalogization = item.find(id=re.compile(CATALOGIZATION_ID))
 
-			try:
-				my_rating = int(float(catalogization.string) * RATING_MULTIPLIER)
+				try:
+					my_rating = int(float(catalogization.string) * RATING_MULTIPLIER)
 
-			except ValueError:
-				continue
+				except ValueError:
+					continue
 
-			try:
-				header = item.next_element.attrs
+				try:
+					header = item.next_element.attrs
 
-			except AttributeError:
-				pass	
+				except AttributeError:
+					pass	
 
 			link = catalogization.parent.parent.find('a').attrs['title']
 			print(HTML_WRAPPER.format(link, my_rating))
