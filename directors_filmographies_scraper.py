@@ -12,16 +12,19 @@ HEADER_CLASS = 'disco_header_top'
 CATALOGIZATION_ID = 'film_cat_catalog_msg'
 HEADER_STRING = 'other roles'
 RATING_MULTIPLIER = 2
-HTML_WRAPPER = '{} [color navy][b]{}[/b][/color]'
+HTML_WRAPPER = '{}. {} [color navy][b]{}[/b][/color]'
 
 
 def run_script():
 	with open(FILENAME) as fp:
+	movies = all_films_rated_scraper.list_of_movies()
 		soup = bs4.BeautifulSoup(fp, PARSER)
 
 	result_set = soup.find(id=FILMS_ID)
 
 	top_billing = []
+	cleaned = []
+
 	for el in result_set:
 		if el.name == FILM_TAG_NAME:
 			top_billing.append(el)
@@ -57,11 +60,14 @@ def run_script():
 				except AttributeError:
 					pass	
 
-			link = catalogization.parent.parent.find('a').attrs['title']
-			print(HTML_WRAPPER.format(link, my_rating))
+				link = catalogization.parent.parent.find('a').attrs['title']
+				rank = movies.index(link) + 1
+				cleaned.append((rank, link, my_rating))
 	else:
 		exit(0)
 
+	for index, movie in enumerate(sorted(cleaned)):
+		print(HTML_WRAPPER.format(index + 1, movie[1], movie[2]))
 
 if __name__ == '__main__':
 	run_script()
