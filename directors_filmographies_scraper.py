@@ -1,10 +1,10 @@
 import bs4
+import easygui
 import re
 
 import all_films_rated_scraper
 
 
-FILENAME = 'films_alfred-hitchcock'
 PARSER = 'html5lib'
 FILMS_ID = 'films'
 FILM_TAG_NAME = 'li'
@@ -16,8 +16,12 @@ HTML_WRAPPER = '{}. {} [color navy][b]{}[/b][/color]'
 
 
 def run_script():
-	with open(FILENAME) as fp:
+	filename = easygui.fileopenbox(title='path to file')
+	print(filename)
+
 	movies = all_films_rated_scraper.list_of_movies()
+
+	with open(filename) as fp:
 		soup = bs4.BeautifulSoup(fp, PARSER)
 
 	result_set = soup.find(id=FILMS_ID)
