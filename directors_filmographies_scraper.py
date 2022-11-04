@@ -1,6 +1,9 @@
 import bs4
 import re
 
+import all_films_rated_scraper
+
+
 FILENAME = 'films_alfred-hitchcock'
 PARSER = 'html5lib'
 FILMS_ID = 'films'
