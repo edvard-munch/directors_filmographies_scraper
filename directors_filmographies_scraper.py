@@ -19,16 +19,19 @@ HTML_WRAPPER = '{}. {} [color navy][b]{}[/b][/color]'
 
 
 def run_script():
-	filename = easygui.fileopenbox(title='path to file')
-	print(filename)
+	files = easygui.fileopenbox(title='path to file', multiple=True)
 
 	movies = all_films_rated_scraper.list_of_movies()
 
-	with open(filename) as fp:
-		soup = bs4.BeautifulSoup(fp, PARSER)
+	for file in files:
+		print(file)
+		with open(file) as fp:
+			soup = bs4.BeautifulSoup(fp, PARSER)
+			scrape_movies(soup, movies)
 
+
+def scrape_movies(soup: bs4.BeautifulSoup, movies: list):
 	result_set = soup.find(id=FILMS_ID)
-
 	top_billing = []
 	cleaned = []
 
@@ -71,10 +74,11 @@ def run_script():
 				rank = movies.index(link) + 1
 				cleaned.append((rank, link, my_rating))
 	else:
-		exit(0)
+		return
 
 	for index, movie in enumerate(sorted(cleaned)):
 		print(HTML_WRAPPER.format(index + 1, movie[1], movie[2]))
+
 
 if __name__ == '__main__':
 	run_script()
