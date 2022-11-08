@@ -1,6 +1,6 @@
 import bs4
 
-FILENAME = 'all_movies_ranked'
+FILENAME = 'files/all_movies_ranked'
 PARSER = 'html5lib'
 FILMS_ID = 'boxes'
 FILM_TAG_NAME = 'li'
