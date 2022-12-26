@@ -17,6 +17,7 @@ HEADER_STRING = 'other roles'
 RATING_MULTIPLIER = 2
 HTML_WRAPPER = '{}. {} [color navy][b]{}[/b][/color]'
 
+ALL_MOVIES = 'all_movies_ranked.html'
 SHORT_MOVIES = 'short_movies_ranked.html'
 
 DIRECTOR = r'• Director'
@@ -25,7 +26,8 @@ DIRECTOR = r'• Director'
 def run_script():
 	files = easygui.fileopenbox(title='path to file', multiple=True)
 
-	movies = all_films_rated_scraper.list_of_movies()
+	movies = [movie[0] for movie in all_films_rated_scraper.list_of_movies(ALL_MOVIES)]
+	short_movies = [movie[0] for movie in all_films_rated_scraper.list_of_movies(SHORT_MOVIES)]
 
 	for file in files:
 		print(file)
