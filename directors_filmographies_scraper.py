@@ -19,6 +19,9 @@ HTML_WRAPPER = '{}. {} [color navy][b]{}[/b][/color]'
 
 SHORT_MOVIES = 'short_movies_ranked.html'
 
+DIRECTOR = r'• Director'
+
+
 def run_script():
 	files = easygui.fileopenbox(title='path to file', multiple=True)
 
@@ -57,7 +60,8 @@ def scrape_movies(soup: bs4.BeautifulSoup, movies: list, short_movies: list):
 	if top_billing:
 		for item in top_billing:
 			involvement = item.find(class_='film_subline').contents[2]
-			if 'Director' in involvement:
+
+			if re.findall(DIRECTOR, involvement):
 				catalogization = item.find(id=re.compile(CATALOGIZATION_ID))
 
 				try:
