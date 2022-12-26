@@ -17,6 +17,7 @@ HEADER_STRING = 'other roles'
 RATING_MULTIPLIER = 2
 HTML_WRAPPER = '{}. {} [color navy][b]{}[/b][/color]'
 
+SHORT_MOVIES = 'short_movies_ranked.html'
 
 def run_script():
 	files = easygui.fileopenbox(title='path to file', multiple=True)
@@ -27,13 +28,14 @@ def run_script():
 		print(file)
 		with open(file) as fp:
 			soup = bs4.BeautifulSoup(fp, PARSER)
-			scrape_movies(soup, movies)
+			scrape_movies(soup, movies, short_movies)
 
 
-def scrape_movies(soup: bs4.BeautifulSoup, movies: list):
+def scrape_movies(soup: bs4.BeautifulSoup, movies: list, short_movies: list):
 	result_set = soup.find(id=FILMS_ID)
 	top_billing = []
 	cleaned = []
+	shorts = []
 
 	for el in result_set:
 		if el.name == FILM_TAG_NAME:
@@ -71,13 +73,23 @@ def scrape_movies(soup: bs4.BeautifulSoup, movies: list):
 					pass	
 
 				link = catalogization.parent.parent.find('a').attrs['title']
-				rank = movies.index(link) + 1
-				cleaned.append((rank, link, my_rating))
+
+				try:
+					rank = movies.index(link) + 1
+					cleaned.append((rank, link, my_rating))
+				except ValueError:
+					rank = short_movies.index(link) + 1
+					shorts.append((rank, link, my_rating))
 	else:
 		return
 
 	for index, movie in enumerate(sorted(cleaned)):
 		print(HTML_WRAPPER.format(index + 1, movie[1], movie[2]))
+
+	if shorts:
+		print('\nShorts:')
+		for index, movie in enumerate(sorted(shorts)):
+			print(HTML_WRAPPER.format(index + 1, movie[1], movie[2]))
 
 
 if __name__ == '__main__':
