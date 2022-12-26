@@ -11,7 +11,7 @@ CATALOGIZATION_FIELD_ID = 'or_q_rating'
 FILM_LINK_CLASS = 'film'
 FILM_GENRE_CLASS = 'film_genre'
 FILE_OPEN_BOX_TITLE = 'Open one or more files'
-EXCLUDE_GENRE = 'Neo'
+EXCLUDE_GENRE_PATTERN = 'Neo'
 
 
 def run_script():
@@ -51,7 +51,7 @@ def run_script():
 	for index, movie in enumerate(sorted(rated_movies)):
 		movie[0] = index + 1
 
-		if EXCLUDE_GENRE in movie[3]:
+		if EXCLUDE_GENRE_PATTERN in movie[3]:
 			print(f'{index+1}. {movie[1]} {movie[2]} ({movie[3]})')
 		else:	
 			print(f'{index+1}. {movie[1]} {movie[2]}')
