@@ -14,7 +14,10 @@ def list_of_movies(filename):
 	movies = []
 	for res in result_set:
 		if res.name == FILM_TAG_NAME:
-			movie_data = [res.contents[1].attrs['title']]
+			try:
+				movie_data = [res.contents[1].attrs['title']]
+			except KeyError:
+				pass
 
 			if res.contents[1].string == None:
 				movie_data.append(f'{res.contents[1].contents[0]} {res.contents[1].contents[1].string}')
