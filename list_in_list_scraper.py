@@ -25,6 +25,11 @@ def run_script():
 
 	with open(OUTPUT_FILE, 'w') as file:
 		for index, movie in enumerate(sorted(cleaned)):
+			if top_250[index] != (movie[1]):
+				old_rank = top_250.index(movie[1]) + 1
+				new_rank = index + 1
+				print(f'{new_rank}({old_rank-new_rank}). {movie[1][1]}')
+
 			file.write(f'{index + 1}. {movie[1][1]}\n')
 
 
