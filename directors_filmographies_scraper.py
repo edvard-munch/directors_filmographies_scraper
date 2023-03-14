@@ -1,4 +1,3 @@
-# need to recognize short movies somehow
 # check for co-director involvements
 
 import bs4

@@ -6,7 +6,7 @@ import all_films_rated_scraper
 
 
 ALL_MOVIES = 'all_movies_ranked.html'
-TOP_250 = 'files/top 250.html'
+TOP_250 = 'files/reorder_list.html'
 OUTPUT_FILE = 'ranked.txt'
 NOT_RATED_MESSAGE = '{} NOT RATED !!!!!'
 
