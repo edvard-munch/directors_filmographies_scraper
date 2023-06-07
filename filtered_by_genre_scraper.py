@@ -5,6 +5,7 @@ import re
 import all_films_rated_scraper
 
 
+ALL_MOVIES = 'all_movies_ranked.html'
 PARSER = 'html5lib'
 ITEM_ID_PATTERN = r'page_catalog_item_\d+'
 CATALOGIZATION_FIELD_ID = 'or_q_rating'
@@ -17,7 +18,8 @@ EXCLUDE_GENRE_PATTERN = 'Neo'
 def run_script():
 	filenames = easygui.fileopenbox(title=FILE_OPEN_BOX_TITLE, multiple=True)
 
-	all_movies = all_films_rated_scraper.list_of_movies()
+	all_movies = all_films_rated_scraper.list_of_movies(ALL_MOVIES)
+	all_movies_link_titles = [movie[0] for movie in all_movies]
 
 	result_set = []
 	for file in filenames:
@@ -27,12 +29,11 @@ def run_script():
 
 		result_set += soup.find_all(id=re.compile(ITEM_ID_PATTERN))
 
-
 	rated_movies = []
 	for result in result_set:
 		my_rating = result.find(class_=CATALOGIZATION_FIELD_ID).string.strip()
-		if my_rating:
 
+		if my_rating:
 			try:
 				film_link = result.find(class_=FILM_LINK_CLASS)
 
@@ -41,7 +42,7 @@ def run_script():
 
 			film_link_title = film_link.attrs['title']
 			film_title = film_link.contents[0]
-			rank = all_movies.index(film_link_title) + 1
+			rank = all_movies_link_titles.index(film_link_title) + 1
 
 			genres_links = result.find_all(class_=FILM_GENRE_CLASS)
 			genres = ', '. join([genre.string for genre in genres_links])
