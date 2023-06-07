@@ -6,6 +6,8 @@ import all_films_rated_scraper
 
 
 ALL_MOVIES = 'all_movies_ranked.html'
+SHORT_MOVIES = 'short_movies_ranked.html'
+
 PARSER = 'html5lib'
 ITEM_ID_PATTERN = r'page_catalog_item_\d+'
 CATALOGIZATION_FIELD_ID = 'or_q_rating'
@@ -20,6 +22,9 @@ def run_script():
 
 	all_movies = all_films_rated_scraper.list_of_movies(ALL_MOVIES)
 	all_movies_link_titles = [movie[0] for movie in all_movies]
+
+	short_movies = all_films_rated_scraper.list_of_movies(SHORT_MOVIES)
+	short_movies_link_titles = [movie[0] for movie in short_movies]
 
 	result_set = []
 	for file in filenames:
@@ -42,7 +47,17 @@ def run_script():
 
 			film_link_title = film_link.attrs['title']
 			film_title = film_link.contents[0]
-			rank = all_movies_link_titles.index(film_link_title) + 1
+
+			try:
+				rank = all_movies_link_titles.index(film_link_title) + 1
+			except ValueError:
+				short_movie = short_movies_link_titles.index(film_link_title)
+
+				if short_movie:
+					print(f"{film_title} is a short movie\n")
+				else:
+					print("Movie is not in the list!")
+				continue
 
 			genres_links = result.find_all(class_=FILM_GENRE_CLASS)
 			genres = ', '. join([genre.string for genre in genres_links])
